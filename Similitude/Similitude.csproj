@@ -46,6 +46,7 @@
     <Compile Include="Core\ISimilarityResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="String\LevenshteinDistanceResolver.cs" />
+    <Compile Include="String\WeightedLevenshteinDistanceResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
