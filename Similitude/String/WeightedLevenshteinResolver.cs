@@ -9,7 +9,7 @@ namespace Similitude.String
     /// 'Edit distance'.
     /// </summary>
     [PublicAPI]
-    public class WeightedLevenshteinDistanceResolver : ISimilarityResolver<string>
+    public class WeightedLevenshteinDistanceResolver : ISimilarityResolver<string>, IDistanceResolver<string>
     {
         public int InsertionWeight { get; }
         public int RemovalWeight { get; }
@@ -18,7 +18,7 @@ namespace Similitude.String
 
         /// <summary>
         /// A similarity and distance resolver that uses the 'Levenshtein distance' algorithm, also known as the
-        /// 'Edit distance'. The weights of each individual edit type is variable.
+        /// 'Edit distance'. The weight of each individual edit type is variable.
         /// </summary>
         /// <param name="insertionWeight">The weight of a character insertion.</param>
         /// <param name="removalWeight">The weight of a character removal.</param>
@@ -45,8 +45,8 @@ namespace Similitude.String
         /// </summary>
         /// <param name="source">The source string.</param>
         /// <param name="target">The target string.</param>
-        /// <returns>A number in the range [0, Math.max(first.Length, second.Length)].</returns>
-        public virtual int GetDistance([NotNull] string source, [NotNull] string target)
+        /// <returns>A number in the range [0, max(first.Length, second.Length)].</returns>
+        public virtual double GetDistance([NotNull] string source, [NotNull] string target)
         {
             var n = source.Length;
             var m = target.Length;
@@ -110,15 +110,15 @@ namespace Similitude.String
         {
             var maxWeight = Math.Max(InsertionWeight, Math.Max(RemovalWeight, SubstitutaionWeight));
             var maxLength = Math.Max(first.Length, second.Length);
-            var maxEdits = maxLength * maxWeight;
+            var maxDistance = maxLength * maxWeight;
 
-            if (maxEdits == 0)
+            if (maxDistance == 0)
             {
                 return 0;
             }
 
             var distance = GetDistance(first, second);
-            var normalizedSimilarity = (double) (maxEdits - distance) / maxEdits;
+            var normalizedSimilarity = (double) (maxDistance - distance) / maxDistance;
 
             return normalizedSimilarity;
         }

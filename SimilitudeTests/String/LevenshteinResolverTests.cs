@@ -20,14 +20,12 @@ namespace SimilitudeTests.String
         [Test]
         public void ShouldBeAbleToBeCaseSensitive()
         {
-            var resolver = new LevenshteinDistanceResolver(
-                caseSensitive: true
-            );
+            var resolver = new LevenshteinDistanceResolver(true);
             const string str1 = "as easy as abc";
             const string str2 = "As easy as ABC";
-            const int edits = 4;
+            const int expectedDistance = 4;
 
-            Assert.AreEqual(edits, resolver.GetDistance(str1, str2));
+            Assert.AreEqual(expectedDistance, resolver.GetDistance(str1, str2));
         }
 
         [Test]
@@ -36,9 +34,9 @@ namespace SimilitudeTests.String
             var resolver = new LevenshteinDistanceResolver();
             const string str1 = "deja entendu";
             const string str2 = "déjà vu";
-            const int edits = 8;
+            const int expectedDistance = 8;
 
-            Assert.AreEqual(edits, resolver.GetDistance(str1, str2));
+            Assert.AreEqual(expectedDistance, resolver.GetDistance(str1, str2));
         }
 
         [Test]
@@ -47,9 +45,9 @@ namespace SimilitudeTests.String
             var resolver = new LevenshteinDistanceResolver();
             const string str1 = "the robot uprising is nigh";
             const string str2 = "da robo uprising be near";
-            const int edits = 9;
+            const int expectedDistance = 9;
 
-            Assert.AreEqual(edits, resolver.GetDistance(str1, str2));
+            Assert.AreEqual(expectedDistance, resolver.GetDistance(str1, str2));
         }
 
         [Test]
@@ -64,15 +62,17 @@ namespace SimilitudeTests.String
         [Test]
         public void ShouldBeAbleToGiveASimilarityPercentageBetweenTwoStrings()
         {
+            const int maxWeight = 1;
             var resolver = new LevenshteinDistanceResolver();
             const string str1 = "wubba lubba dub dub";
             const string str2 = "yabba dabba doo";
-            const int edits = 10;
+            const int expectedDistance = 10;
             var maxLength = Math.Max(str1.Length, str2.Length);
-            var similarity = 1 - ((double) edits / maxLength);
+            var maxDistance = maxLength * maxWeight;
+            var similarity = resolver.GetSimilarity(str1, str2);
 
             Assert.IsTrue(similarity >= 0 && similarity <= 1);
-            Assert.AreEqual(similarity, resolver.GetSimilarity(str1, str2), 1e-10);
+            Assert.AreEqual(1 - (double) expectedDistance / maxDistance, similarity, 1e-10);
         }
     }
 }

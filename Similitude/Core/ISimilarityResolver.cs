@@ -7,11 +7,9 @@ namespace Similitude.Core
     {
         /// <summary>
         /// Compares two elements of arbitrary type <typeparamref name="T"/> and resolves a normalized result
-        /// indicating their similarity.
+        /// indicating their similarity. The larger the result, the more similar the elements are determined to be.
+        /// The result is 1 if and only if the elements are equal.
         /// </summary>
-        /// <param name="first">The first element.</param>
-        /// <param name="second">The second element.</param>
-        /// <returns>A number in the range [0, 1].</returns>
         double GetSimilarity(T first, T second);
     }
 }
