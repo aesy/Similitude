@@ -1,0 +1,28 @@
+sudo: false
+notifications:
+  email: false
+language: csharp
+solution: Similitude.sln
+install:
+  - nuget restore Similitude.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory tools
+  - nuget install coveralls.io -Version 1.3.4 -OutputDirectory tools
+  - nuget install OpenCover -Version 4.6.519 -OutputDirectory tools
+matrix:
+  include:
+    - dotnet:
+      - latest
+      mono: none
+    - mono:
+      - latest
+jobs:
+  include:
+    - stage: test:coverage
+      script:
+        - xbuild /p:Configuration=Release Similitude.sln
+      after_success:
+        - mono tools/OpenCover.4.6.519/tools/OpenCover.Console.exe -register:user -filter:"+[*]*" -target:"tools/NUnit.Runners.2.6.4/tools/nunit-console.exe" -targetargs:"/noshadow /domain:single SimilitudeTests/bin/Release/SimilitudeTests.dll" -output:coverage.xml
+        - mono tools/coveralls.io.1.3.4/tools/coveralls.net.exe --opencover -i coverage.xml
+script:
+  - xbuild /p:Configuration=Release Similitude.sln
+  - mono tools/testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe SimilitudeTests/bin/Release/SimilitudeTests.dll
