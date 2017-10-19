@@ -45,7 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="String\LevenshteinDistanceResolverTests.cs" />
+    <Compile Include="String\LevenshteinResolverTests.cs" />
+    <Compile Include="String\WeightedLevenshteinResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
